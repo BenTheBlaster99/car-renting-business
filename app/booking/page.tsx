@@ -12,10 +12,10 @@ export default async function BookingPage({ searchParams }: BookingPageProps) {
     <div className="min-h-screen bg-slate-50">
       <SiteHeader />
       <main className="mx-auto w-full max-w-3xl px-6 py-10">
-        <h1 className="text-3xl font-bold text-slate-900">Booking</h1>
+        <h1 className="text-3xl font-bold text-slate-900">Reservation</h1>
         <p className="mt-2 text-slate-600">
-          First completed request reserves the car immediately. The rental team then calls the customer
-          to confirm.
+          La premiere demande validee reserve la voiture immediatement. L equipe location appelle ensuite
+          le client pour confirmer.
         </p>
         <div className="mt-6">
           <BookingRequestForm initialCarId={carId} />

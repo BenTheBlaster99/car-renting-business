@@ -26,7 +26,7 @@ export function AdminBookingsTable() {
       const data = await getBookingsWithCars();
       setRows(data);
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Failed to load bookings.");
+      setErrorMessage(error instanceof Error ? error.message : "Echec du chargement des reservations.");
     } finally {
       setLoading(false);
     }
@@ -41,12 +41,12 @@ export function AdminBookingsTable() {
       await updateBookingStatus(id, status, carId);
       await loadRows();
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Failed to update booking.");
+      setErrorMessage(error instanceof Error ? error.message : "Echec de la mise a jour de la reservation.");
     }
   };
 
   if (loading) {
-    return <div className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-600">Loading...</div>;
+    return <div className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-600">Chargement...</div>;
   }
 
   return (
@@ -58,13 +58,13 @@ export function AdminBookingsTable() {
         <table className="min-w-full divide-y divide-slate-200 text-sm">
           <thead className="bg-slate-50">
             <tr>
-              <th className="px-4 py-3 text-left font-semibold text-slate-700">Customer</th>
-              <th className="px-4 py-3 text-left font-semibold text-slate-700">Phone</th>
-              <th className="px-4 py-3 text-left font-semibold text-slate-700">Car</th>
-              <th className="px-4 py-3 text-left font-semibold text-slate-700">Pickup</th>
-              <th className="px-4 py-3 text-left font-semibold text-slate-700">Return</th>
-              <th className="px-4 py-3 text-left font-semibold text-slate-700">Status</th>
-              <th className="px-4 py-3 text-left font-semibold text-slate-700">Confirmation workflow</th>
+              <th className="px-4 py-3 text-left font-semibold text-slate-700">Client</th>
+              <th className="px-4 py-3 text-left font-semibold text-slate-700">Telephone</th>
+              <th className="px-4 py-3 text-left font-semibold text-slate-700">Voiture</th>
+              <th className="px-4 py-3 text-left font-semibold text-slate-700">Retrait</th>
+              <th className="px-4 py-3 text-left font-semibold text-slate-700">Retour</th>
+              <th className="px-4 py-3 text-left font-semibold text-slate-700">Statut</th>
+              <th className="px-4 py-3 text-left font-semibold text-slate-700">Suivi confirmation</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
@@ -87,17 +87,17 @@ export function AdminBookingsTable() {
                     }
                     className="rounded-md border border-slate-300 px-2 py-1 text-xs font-medium text-slate-700"
                   >
-                    <option value="pending">pending</option>
-                    <option value="confirmed">confirmed</option>
-                    <option value="rejected">rejected</option>
+                    <option value="pending">en attente</option>
+                    <option value="confirmed">confirmee</option>
+                    <option value="rejected">refusee</option>
                   </select>
                 </td>
                 <td className="px-4 py-3 text-xs text-slate-600">
                   {booking.status === "pending"
-                    ? "Call customer to confirm. Car is blocked for others."
+                    ? "Appelez le client pour confirmer. La voiture reste bloquee."
                     : booking.status === "confirmed"
-                      ? "Confirmed. Keep car unavailable."
-                      : "Rejected. Car becomes available again."}
+                      ? "Confirmee. Gardez la voiture indisponible."
+                      : "Refusee. La voiture redevient disponible."}
                 </td>
               </tr>
             ))}

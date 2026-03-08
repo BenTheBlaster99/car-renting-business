@@ -20,7 +20,7 @@ export default function CarDetailsPage() {
         const data = await getCarById(params.id);
         setCar(data);
       } catch (error) {
-        setErrorMessage(error instanceof Error ? error.message : "Failed to load car.");
+        setErrorMessage(error instanceof Error ? error.message : "Echec du chargement de la voiture.");
       } finally {
         setLoading(false);
       }
@@ -37,10 +37,10 @@ export default function CarDetailsPage() {
         <SiteHeader />
         <main className="mx-auto w-full max-w-3xl px-6 py-10">
           <Link href="/cars" className="text-sm font-medium text-slate-600 hover:text-slate-900">
-            Back to cars
+            Retour aux voitures
           </Link>
           <div className="mt-4 rounded-xl border border-slate-200 bg-white p-6 text-slate-700 shadow-sm">
-            {loading ? "Loading car details..." : errorMessage ?? "Car not found."}
+            {loading ? "Chargement des details de la voiture..." : errorMessage ?? "Voiture introuvable."}
           </div>
         </main>
       </div>
@@ -52,7 +52,7 @@ export default function CarDetailsPage() {
       <SiteHeader />
       <main className="mx-auto w-full max-w-7xl px-6 py-10">
         <Link href="/cars" className="text-sm font-medium text-slate-600 hover:text-slate-900">
-          Back to cars
+          Retour aux voitures
         </Link>
 
         <div className="mt-4 grid gap-6 lg:grid-cols-[2fr_1fr]">
@@ -85,23 +85,23 @@ export default function CarDetailsPage() {
                 <tbody>
                   <tr className="border-b border-slate-100">
                     <td className="py-2 text-slate-600">Entre 2 et 5 jrs</td>
-                    <td className="py-2 text-slate-800">{car.pricePerDay + 10} EUR</td>
-                    <td className="py-2 text-slate-800">{car.pricePerDay + 5} EUR</td>
+                    <td className="py-2 text-slate-800">{car.pricePerDay + 10} DA</td>
+                    <td className="py-2 text-slate-800">{car.pricePerDay + 5} DA</td>
                   </tr>
                   <tr className="border-b border-slate-100">
                     <td className="py-2 text-slate-600">Entre 6 et 12 jrs</td>
-                    <td className="py-2 text-slate-800">{car.pricePerDay} EUR</td>
-                    <td className="py-2 text-slate-800">{Math.max(car.pricePerDay - 5, 1)} EUR</td>
+                    <td className="py-2 text-slate-800">{car.pricePerDay} DA</td>
+                    <td className="py-2 text-slate-800">{Math.max(car.pricePerDay - 5, 1)} DA</td>
                   </tr>
                   <tr className="border-b border-slate-100">
                     <td className="py-2 text-slate-600">Entre 13 et 20 jrs</td>
-                    <td className="py-2 text-slate-800">{Math.max(car.pricePerDay - 5, 1)} EUR</td>
-                    <td className="py-2 text-slate-800">{Math.max(car.pricePerDay - 10, 1)} EUR</td>
+                    <td className="py-2 text-slate-800">{Math.max(car.pricePerDay - 5, 1)} DA</td>
+                    <td className="py-2 text-slate-800">{Math.max(car.pricePerDay - 10, 1)} DA</td>
                   </tr>
                   <tr>
                     <td className="py-2 text-slate-600">Plus de 20 jrs</td>
-                    <td className="py-2 text-slate-800">{Math.max(car.pricePerDay - 10, 1)} EUR</td>
-                    <td className="py-2 text-slate-800">{Math.max(car.pricePerDay - 15, 1)} EUR</td>
+                    <td className="py-2 text-slate-800">{Math.max(car.pricePerDay - 10, 1)} DA</td>
+                    <td className="py-2 text-slate-800">{Math.max(car.pricePerDay - 15, 1)} DA</td>
                   </tr>
                 </tbody>
               </table>
@@ -144,10 +144,13 @@ export default function CarDetailsPage() {
                   <dt className="text-slate-500">Couleur</dt>
                   <dd className="font-medium text-slate-900">{car.color}</dd>
                 </div>
+                <div className="flex justify-between py-1">
+                  <dt className="text-slate-500">Description</dt>
+                  <dd className="font-medium text-slate-900">{car.description}</dd>
+                </div>
               </dl>
             </section>
 
-            <p className="text-sm text-slate-600">{car.description}</p>
 
             <div>
               {car.availability ? (
@@ -155,7 +158,7 @@ export default function CarDetailsPage() {
                   href={`/booking?carId=${car.id}`}
                   className="inline-flex w-full items-center justify-center rounded-md bg-red-600 px-4 py-4 text-lg font-semibold uppercase text-white hover:bg-red-700"
                 >
-                  Contactez-Nous
+                  Envoyer une demande de reservation
                 </Link>
               ) : (
                 <div className="rounded-md bg-slate-400 px-4 py-4 text-center text-lg font-semibold uppercase text-white">

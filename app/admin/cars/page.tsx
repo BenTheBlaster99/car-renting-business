@@ -6,8 +6,8 @@ export default function AdminCarsPage() {
     <div className="min-h-screen bg-slate-50">
       <SiteHeader />
       <main className="mx-auto w-full max-w-6xl px-6 py-10">
-        <h1 className="text-3xl font-bold text-slate-900">Admin - Cars</h1>
-        <p className="mt-2 text-slate-600">Manage cars inventory for the booking website.</p>
+        <h1 className="text-3xl font-bold text-slate-900">Admin - Voitures</h1>
+        <p className="mt-2 text-slate-600">Gerez l inventaire des voitures du site de reservation.</p>
 
         <div className="mt-8">
           <AdminCarsManager />

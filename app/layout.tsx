@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CityDrive Rentals Demo",
-  description: "Car rental business demo with customer and admin dashboards.",
+  title: "CityDrive Rentals - Demo",
+  description: "Demo de location de voitures avec espace client et tableau de bord admin.",
 };
 
 export default function RootLayout({
@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

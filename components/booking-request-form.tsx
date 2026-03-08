@@ -32,7 +32,7 @@ export function BookingRequestForm({ initialCarId }: BookingRequestFormProps) {
             : nextCars.find((car) => car.availability)?.id ?? nextCars[0]?.id ?? "",
         );
       } catch (error) {
-        setErrorMessage(error instanceof Error ? error.message : "Failed to load cars.");
+        setErrorMessage(error instanceof Error ? error.message : "Echec du chargement des voitures.");
       } finally {
         setLoading(false);
       }
@@ -62,7 +62,7 @@ export function BookingRequestForm({ initialCarId }: BookingRequestFormProps) {
       });
 
       if (!result.ok) {
-        setErrorMessage("This car is no longer available. Please pick another car.");
+        setErrorMessage("Cette voiture n est plus disponible. Veuillez en choisir une autre.");
         const refreshedCars = await getCars();
         setCars(refreshedCars);
         setSelectedCarId(refreshedCars.find((car) => car.availability)?.id ?? refreshedCars[0]?.id ?? "");
@@ -77,20 +77,20 @@ export function BookingRequestForm({ initialCarId }: BookingRequestFormProps) {
       setPickupDate("");
       setReturnDate("");
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Failed to submit booking.");
+      setErrorMessage(error instanceof Error ? error.message : "Echec de l envoi de la reservation.");
     }
   };
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-      <h2 className="text-xl font-semibold text-slate-900">Booking Request</h2>
+      <h2 className="text-xl font-semibold text-slate-900">Demande de reservation</h2>
       <p className="mt-2 text-sm text-slate-600">
-        Submit this form to reserve the car, then the business team calls you to confirm.
+        Envoyez ce formulaire pour reserver la voiture, puis l equipe vous appelle pour confirmer.
       </p>
 
       <form onSubmit={onSubmit} className="mt-6 space-y-4">
         <label className="block text-sm font-medium text-slate-700">
-          Name
+          Nom
           <input
             required
             value={customerName}
@@ -100,7 +100,7 @@ export function BookingRequestForm({ initialCarId }: BookingRequestFormProps) {
         </label>
 
         <label className="block text-sm font-medium text-slate-700">
-          Phone
+          Telephone
           <input
             required
             value={phone}
@@ -110,7 +110,7 @@ export function BookingRequestForm({ initialCarId }: BookingRequestFormProps) {
         </label>
 
         <label className="block text-sm font-medium text-slate-700">
-          Car
+          Voiture
           <select
             value={selectedCarId}
             onChange={(event) => setSelectedCarId(event.target.value)}
@@ -120,7 +120,7 @@ export function BookingRequestForm({ initialCarId }: BookingRequestFormProps) {
             {cars.map((car) => (
               <option key={car.id} value={car.id} disabled={!car.availability}>
                 {car.brand} {car.name}{" "}
-                {car.availability ? "" : "(not available right now)"}
+                {car.availability ? "" : "(indisponible pour le moment)"}
               </option>
             ))}
           </select>
@@ -128,8 +128,10 @@ export function BookingRequestForm({ initialCarId }: BookingRequestFormProps) {
 
         {selectedCar ? (
           <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Selected car</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Voiture selectionnee</p>
             <div className="mt-2 flex items-start gap-3">
+              {/* Booking card may contain data URL images; using img avoids loader constraints. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={selectedCar.imageUrl}
                 alt={`${selectedCar.brand} ${selectedCar.name}`}
@@ -140,7 +142,7 @@ export function BookingRequestForm({ initialCarId }: BookingRequestFormProps) {
                   {selectedCar.brand} {selectedCar.name}
                 </p>
                 <p>{selectedCar.year} • {selectedCar.fuelType} • {selectedCar.transmission}</p>
-                <p>{selectedCar.seats} seats • EUR {selectedCar.pricePerDay}/day</p>
+                <p>{selectedCar.seats} places • {selectedCar.pricePerDay} DA/jour</p>
               </div>
             </div>
           </div>
@@ -148,7 +150,7 @@ export function BookingRequestForm({ initialCarId }: BookingRequestFormProps) {
 
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block text-sm font-medium text-slate-700">
-            Pickup date
+            Date de retrait
             <input
               required
               type="date"
@@ -158,7 +160,7 @@ export function BookingRequestForm({ initialCarId }: BookingRequestFormProps) {
             />
           </label>
           <label className="block text-sm font-medium text-slate-700">
-            Return date
+            Date de retour
             <input
               required
               type="date"
@@ -174,14 +176,18 @@ export function BookingRequestForm({ initialCarId }: BookingRequestFormProps) {
           disabled={loading || !hasAvailableCars || !selectedCar?.availability}
           className="w-full rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700"
         >
-          {loading ? "Loading cars..." : hasAvailableCars ? "Submit request" : "No cars available right now"}
+          {loading
+            ? "Chargement des voitures..."
+            : hasAvailableCars
+              ? "Envoyer la demande"
+              : "Aucune voiture disponible pour le moment"}
         </button>
       </form>
 
       {submitted ? (
         <div className="mt-4 rounded-md border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
-          Request sent for {selectedCar?.brand} {selectedCar?.name}. The car is now held for you while
-          the rental team calls to confirm.
+          Demande envoyee pour {selectedCar?.brand} {selectedCar?.name}. La voiture est reservee pour vous
+          pendant que l equipe vous appelle pour confirmation.
         </div>
       ) : null}
       {errorMessage ? (

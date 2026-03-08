@@ -207,7 +207,7 @@ export async function getBookingsWithCars() {
     const car = carsMap.get(booking.carId);
     return {
       ...booking,
-      carName: car ? `${car.brand} ${car.name}` : "Unknown car",
+      carName: car ? `${car.brand} ${car.name}` : "Voiture inconnue",
     };
   }) as BookingWithCarName[];
 }

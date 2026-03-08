@@ -14,7 +14,7 @@ const fileToDataUrl = (file: File) =>
   new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(String(reader.result ?? ""));
-    reader.onerror = () => reject(new Error("Failed to read selected file."));
+    reader.onerror = () => reject(new Error("Impossible de lire le fichier selectionne."));
     reader.readAsDataURL(file);
   });
 
@@ -43,7 +43,7 @@ export function AdminCarsManager() {
       const data = await getCars();
       setCars(data);
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Failed to load cars.");
+      setErrorMessage(error instanceof Error ? error.message : "Echec du chargement des voitures.");
     } finally {
       setLoading(false);
     }
@@ -77,7 +77,7 @@ export function AdminCarsManager() {
       await createCar(carPayload);
       await loadCars();
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Failed to add car.");
+      setErrorMessage(error instanceof Error ? error.message : "Echec de l ajout de la voiture.");
       return;
     }
 
@@ -106,7 +106,7 @@ export function AdminCarsManager() {
       setImageUrl(dataUrl);
       setImageFileName(file.name);
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Failed to load selected image.");
+      setErrorMessage(error instanceof Error ? error.message : "Echec du chargement de l image.");
     }
   };
 
@@ -115,7 +115,7 @@ export function AdminCarsManager() {
       await deleteCarById(id);
       await loadCars();
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Failed to delete car.");
+      setErrorMessage(error instanceof Error ? error.message : "Echec de la suppression de la voiture.");
     }
   };
 
@@ -124,12 +124,12 @@ export function AdminCarsManager() {
       await setCarAvailability(id, !value);
       await loadCars();
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Failed to update availability.");
+      setErrorMessage(error instanceof Error ? error.message : "Echec de la mise a jour de disponibilite.");
     }
   };
 
   const quickEditPrice = async (id: string) => {
-    const value = window.prompt("New price per day");
+    const value = window.prompt("Nouveau prix par jour (DA)");
     if (!value) return;
     const nextPrice = Number(value);
     if (Number.isNaN(nextPrice) || nextPrice <= 0) return;
@@ -137,7 +137,7 @@ export function AdminCarsManager() {
       await updateCarPrice(id, nextPrice);
       await loadCars();
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Failed to update price.");
+      setErrorMessage(error instanceof Error ? error.message : "Echec de la mise a jour du prix.");
     }
   };
 
@@ -147,10 +147,10 @@ export function AdminCarsManager() {
         <div className="rounded-md border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700">{errorMessage}</div>
       ) : null}
       <form onSubmit={addCar} className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-slate-900">Add car</h2>
+        <h2 className="text-lg font-semibold text-slate-900">Ajouter une voiture</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <label className="text-sm font-medium text-slate-700">
-            Name
+            Nom
             <input
               required
               value={name}
@@ -159,7 +159,7 @@ export function AdminCarsManager() {
             />
           </label>
           <label className="text-sm font-medium text-slate-700">
-            Brand
+            Marque
             <input
               required
               value={brand}
@@ -168,7 +168,7 @@ export function AdminCarsManager() {
             />
           </label>
           <label className="text-sm font-medium text-slate-700">
-            Year
+            Annee
             <input
               required
               type="number"
@@ -179,7 +179,7 @@ export function AdminCarsManager() {
             />
           </label>
           <label className="text-sm font-medium text-slate-700">
-            Price per day (EUR)
+            Prix par jour (DA)
             <input
               required
               type="number"
@@ -190,18 +190,18 @@ export function AdminCarsManager() {
             />
           </label>
           <label className="text-sm font-medium text-slate-700">
-            Availability
+            Disponibilite
             <select
               value={availability ? "available" : "unavailable"}
               onChange={(event) => setAvailabilityValue(event.target.value === "available")}
               className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
             >
-              <option value="available">available</option>
-              <option value="unavailable">unavailable</option>
+              <option value="available">disponible</option>
+              <option value="unavailable">indisponible</option>
             </select>
           </label>
           <label className="text-sm font-medium text-slate-700">
-            Fuel type
+            Type de carburant
             <input
               required
               value={fuelType}
@@ -219,7 +219,7 @@ export function AdminCarsManager() {
             />
           </label>
           <label className="text-sm font-medium text-slate-700">
-            Seats
+            Places
             <input
               required
               type="number"
@@ -230,7 +230,7 @@ export function AdminCarsManager() {
             />
           </label>
           <label className="text-sm font-medium text-slate-700">
-            Condition
+            Etat
             <input
               required
               value={condition}
@@ -250,7 +250,7 @@ export function AdminCarsManager() {
             />
           </label>
           <label className="text-sm font-medium text-slate-700">
-            Color
+            Couleur
             <input
               required
               value={color}
@@ -259,7 +259,7 @@ export function AdminCarsManager() {
             />
           </label>
           <label className="text-sm font-medium text-slate-700 sm:col-span-2">
-            Car image (file)
+            Image de la voiture (fichier)
             <input
               required
               type="file"
@@ -268,12 +268,14 @@ export function AdminCarsManager() {
               className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
             />
             {imageFileName ? (
-              <p className="mt-1 text-xs text-slate-500">Selected: {imageFileName}</p>
+              <p className="mt-1 text-xs text-slate-500">Selectionne: {imageFileName}</p>
             ) : null}
             {imageUrl ? (
+              // Local preview can be data URL; using img keeps it simple here.
+              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={imageUrl}
-                alt="Selected car preview"
+                alt="Apercu de la voiture selectionnee"
                 className="mt-3 h-24 w-40 rounded-md border border-slate-200 object-cover"
               />
             ) : null}
@@ -293,7 +295,7 @@ export function AdminCarsManager() {
           type="submit"
           className="mt-4 rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700"
         >
-          Add car
+          Ajouter la voiture
         </button>
       </form>
 
@@ -301,9 +303,9 @@ export function AdminCarsManager() {
         <table className="min-w-full divide-y divide-slate-200 text-sm">
           <thead className="bg-slate-50">
             <tr>
-              <th className="px-4 py-3 text-left font-semibold text-slate-700">Car</th>
-              <th className="px-4 py-3 text-left font-semibold text-slate-700">Price/day</th>
-              <th className="px-4 py-3 text-left font-semibold text-slate-700">Status</th>
+              <th className="px-4 py-3 text-left font-semibold text-slate-700">Voiture</th>
+              <th className="px-4 py-3 text-left font-semibold text-slate-700">Prix/jour</th>
+              <th className="px-4 py-3 text-left font-semibold text-slate-700">Statut</th>
               <th className="px-4 py-3 text-left font-semibold text-slate-700">Actions</th>
             </tr>
           </thead>
@@ -311,7 +313,7 @@ export function AdminCarsManager() {
             {loading ? (
               <tr>
                 <td className="px-4 py-3 text-slate-600" colSpan={4}>
-                  Loading...
+                  Chargement...
                 </td>
               </tr>
             ) : cars.map((car) => (
@@ -322,15 +324,32 @@ export function AdminCarsManager() {
                   </div>
                   <div className="text-xs text-slate-500">{car.id}</div>
                 </td>
-                <td className="px-4 py-3">EUR {car.pricePerDay}</td>
+                <td className="px-4 py-3 text-green-700">{car.pricePerDay} DA</td>
                 <td className="px-4 py-3">
-                  <span
-                    className={`rounded-full px-2 py-1 text-xs font-semibold ${
-                      car.availability ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"
-                    }`}
-                  >
-                    {car.availability ? "available" : "unavailable"}
-                  </span>
+                  <label className="inline-flex cursor-pointer items-center gap-2">
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={car.availability}
+                      onClick={() => void toggleAvailability(car.id, car.availability)}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
+                        car.availability ? "bg-emerald-500" : "bg-slate-300"
+                      }`}
+                    >
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
+                          car.availability ? "translate-x-6" : "translate-x-1"
+                        }`}
+                      />
+                    </button>
+                    <span
+                      className={`text-xs font-semibold ${
+                        car.availability ? "text-emerald-700" : "text-slate-600"
+                      }`}
+                    >
+                      {car.availability ? "Disponible" : "Indisponible"}
+                    </span>
+                  </label>
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex flex-wrap gap-2">
@@ -339,21 +358,14 @@ export function AdminCarsManager() {
                       onClick={() => quickEditPrice(car.id)}
                       className="rounded-md border border-slate-300 px-2 py-1 text-xs font-medium text-slate-700"
                     >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => void toggleAvailability(car.id, car.availability)}
-                      className="rounded-md border border-slate-300 px-2 py-1 text-xs font-medium text-slate-700"
-                    >
-                      Mark {car.availability ? "unavailable" : "available"}
+                      Modifier
                     </button>
                     <button
                       type="button"
                       onClick={() => void removeCar(car.id)}
                       className="rounded-md border border-red-300 px-2 py-1 text-xs font-medium text-red-700"
                     >
-                      Delete
+                      Supprimer
                     </button>
                   </div>
                 </td>
